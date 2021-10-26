@@ -21,14 +21,14 @@ export function Home(){
         history.push('/rooms/new');
       }
 
-
+        //Cria a função para se juntar a sala
       async function handleJoinRoom(event: FormEvent) {
           event.preventDefault();
-
+            //Verifica se não esta vazio
           if (roomCode.trim() === '') {
             return;
           }
-
+            //Verifica se o codigo da sala existe
           const roomRef =  ref(database, `rooms/${roomCode}`);
             const roomSnapshot = await get(roomRef);
             if (!roomSnapshot.exists()) {

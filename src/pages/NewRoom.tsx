@@ -11,10 +11,10 @@ export function NewRoom(){
     const history = useHistory();
 
     const [newRoom, setNewRoom] = useState('');
-
+    //Faz a criação da sala
     async function handleCreateRoom(event: FormEvent){
         event.preventDefault();
-        
+        //verifica se não está vazio
         if (newRoom.trim() === ''){
             return;
         }
@@ -22,7 +22,7 @@ export function NewRoom(){
 
         const roomRef = ref(database, 'rooms');
 
-
+        //Salva no banco de dados dados da sala
         const firebaseRoom = await push(roomRef, {
             tittle: newRoom,
             authorId: user?.id,
