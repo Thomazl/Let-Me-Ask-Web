@@ -1,4 +1,4 @@
-.button{
+.button {
     margin: top 64px;
     height: 50px;
     border-radius: 8px;
@@ -12,15 +12,16 @@
     padding: 0 32px;
     border: 0;
     transition: filter 0.2s;
-    img{
+
+    img {
         margin-right: 8px;
     }
 
-    &:not(:disabled):hover{
+    &:not(:disabled):hover {
         filter: brightness(0.9);
     }
 
-    &:disabled{
+    &:disabled {
         opacity: .6;
         cursor: not-allowed;
 
