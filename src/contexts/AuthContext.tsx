@@ -16,12 +16,12 @@ type AuthContextType = {
 type AuthContextProviderProps = {
   children: ReactNode;
 }
-
+//Cria o contexto de autenticação
 export const AuthContext = createContext({} as AuthContextType);
-
+//Pega as informações do usuário logado
 export function AuthContextProvider(props: AuthContextProviderProps) {
   const [user, setUser] = useState<User>();
-
+// Guarda as informações do usuário no estado
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
@@ -43,7 +43,7 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
       unsubscribe();
     }
   }, [])
-
+//Função para fazer o login com o google
   async function signInWithGoogle() {
     const provider = new GoogleAuthProvider();
 
