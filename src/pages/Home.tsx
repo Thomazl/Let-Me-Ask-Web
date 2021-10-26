@@ -6,7 +6,7 @@ import googleSVG from '../assets/images/google-icon.svg';
 import {Button} from '../components/button';
 import '../styles/auth.scss';
 import { FormEvent, useState } from 'react';
-import { database, ref, once } from '../services/firebase';
+import { database, ref, get } from '../services/firebase';
 
 export function Home(){
     const history = useHistory();
@@ -29,14 +29,15 @@ export function Home(){
             return;
           }
 
-          const roomRef = ref(database, `rooms/${roomCode}`);
-          once('value', (snapshot: { exists: () => any; }) => {
-                if (!snapshot.exists()) {
-                    return;
-                }
-                history.push(`/rooms/${roomCode}`);
-            },);
-                // history.push(`/rooms/${roomCode}`);
+          const roomRef =  ref(database, `rooms/${roomCode}`);
+            const roomSnapshot = await get(roomRef);
+            if (!roomSnapshot.exists()) {
+                alert('Room does not exist!');
+                return;
+            }
+
+          
+             history.push(`/rooms/${roomCode}`);
       }
     return (
         <div id="page-auth">
