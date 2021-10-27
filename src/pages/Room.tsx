@@ -1,15 +1,45 @@
+import { FormEvent, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import logoSVG from '../assets/images/logo.svg';
 import { Button } from '../components/button';
 import { RoomCode } from '../components/roomcode';
+import { useAuth } from '../hooks/useAuth';
+import { database, ref, push } from '../services/firebase';
 import '../styles/room.scss';
 
 type RoomParams = {
   id: string;
-}
+};
 
 export function Room() {
+  const { user } = useAuth();
   const params = useParams<RoomParams>();
+  const [newQuestion, setNewQuestion] = useState('');
+  const questions = ref(database, `rooms/${params.id}/questions`);
+
+  const roomId = params.id;
+
+  async function handleSendQuestion(event: FormEvent) {
+    event.preventDefault();
+    if (newQuestion.trim() === '') {
+      return;
+    }
+    if (!user) {
+      throw new Error('User not authenticated');
+    }
+    const question = {
+      content: newQuestion,
+      author: {
+        name: user.name,
+        avatar: user.avatar,
+      },
+      isHighlighted: false,
+      isAnswer: false,
+    };
+
+    push(questions, question);
+
+  }
 
   return (
     <div>
@@ -17,7 +47,7 @@ export function Room() {
         <header>
           <div className="content">
             <img src={logoSVG} alt="letmeask" />
-            <RoomCode code={params.id} />
+            <RoomCode code={roomId} />
           </div>
         </header>
 
@@ -27,13 +57,15 @@ export function Room() {
             <span>4 Perguntas</span>
           </div>
 
-          <form>
+          <form onSubmit={handleSendQuestion}>
             <textarea
               placeholder="Faça sua pergunta!"
+              onChange={event => setNewQuestion(event.target.value)}
+              value={newQuestion}
             />
             <div className="form-footer">
               <span>Para enviar uma pergunta, <button>faça seu login</button></span>
-              <Button type="submit">Enviar pergunta</Button>
+              <Button type="submit" disabled={!user}>Enviar pergunta</Button>
             </div>
           </form>
         </main>
