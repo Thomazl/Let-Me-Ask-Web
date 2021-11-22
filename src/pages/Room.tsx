@@ -4,7 +4,7 @@ import logoSVG from '../assets/images/logo.svg';
 import { Button } from '../components/button';
 import { RoomCode } from '../components/roomcode';
 import { useAuth } from '../hooks/useAuth';
-import { database, ref, push } from '../services/firebase';
+import { database } from '../services/firebase';
 import '../styles/room.scss';
 
 type RoomParams = {
@@ -18,6 +18,7 @@ export function Room() {
   const questions = ref(database, `rooms/${params.id}/questions`);
 
   const roomId = params.id;
+
 
   async function handleSendQuestion(event: FormEvent) {
     event.preventDefault();
