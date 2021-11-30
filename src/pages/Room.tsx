@@ -4,7 +4,7 @@ import logoSVG from '../assets/images/logo.svg';
 import { Button } from '../components/button';
 import { RoomCode } from '../components/roomcode';
 import { useAuth } from '../hooks/useAuth';
-import { database } from '../services/firebase';
+import { database, ref } from '../services/firebase';
 import '../styles/room.scss';
 
 type RoomParams = {
@@ -84,3 +84,7 @@ export function Room() {
     </div>
   );
 }
+function push(questions: any, question: { content: string; author: { name: string; avatar: string; }; isHighlighted: boolean; isAnswer: boolean; }) {
+  throw new Error('Function not implemented.');
+}
+

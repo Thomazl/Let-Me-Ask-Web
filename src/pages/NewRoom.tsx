@@ -4,7 +4,7 @@ import ilustrationSVG from '../assets/images/illustration.svg';
 import logoSVG from '../assets/images/logo.svg';
 import { Button } from '../components/button';
 import '../styles/auth.scss';
-import { database, push, ref } from '../services/firebase';
+import { database, ref } from '../services/firebase';
 import { useAuth } from '../hooks/useAuth';
 export function NewRoom() {
     const { user } = useAuth()
@@ -23,12 +23,12 @@ export function NewRoom() {
         const roomRef = ref(database, 'rooms');
 
         //Salva no banco de dados dados da sala
-        const firebaseRoom = await push(roomRef, {
+        const firebaseRoom = push(roomRef, {
             tittle: newRoom,
             authorId: user?.id,
         })
 
-        history.push(`/rooms/${firebaseRoom.key}`);
+        history.push(`/rooms/${firebaseRoom}`);
     }
     return (
         <div id="page-auth">
@@ -57,4 +57,8 @@ export function NewRoom() {
             </main>
         </div>
     )
+}
+
+function push(roomRef: any, arg1: { tittle: string; authorId: string | undefined; }) {
+    throw new Error('Function not implemented.');
 }
