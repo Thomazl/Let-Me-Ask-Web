@@ -22,4 +22,4 @@ const auth = getAuth();
 
 const database = getDatabase();
 
-export { auth, database, app, get, ref};
+export { auth, database, app, get, ref };

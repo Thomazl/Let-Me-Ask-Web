@@ -1,5 +1,7 @@
-import { FormEvent, useState } from 'react';
+import { push } from 'firebase/database';
+import { FormEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import swal from 'sweetalert';
 import logoSVG from '../assets/images/logo.svg';
 import { Button } from '../components/button';
 import { RoomCode } from '../components/roomcode';
@@ -18,11 +20,20 @@ export function Room() {
   const questions = ref(database, `rooms/${params.id}/questions`);
 
   const roomId = params.id;
+// 1h 19min 
+  // useEffect(() => {
+  //   const roomref = ref(database, `rooms/${roomId}`);
+
+  //   roomref.ref.once('value', (room => {
+  //     console.log(room.val());
+  //   })
+  // },[roomId]);
 
 
   async function handleSendQuestion(event: FormEvent) {
     event.preventDefault();
     if (newQuestion.trim() === '') {
+      swal('Oops...', 'Por favor, digite uma pergunta', 'warning');
       return;
     }
     if (!user) {
@@ -84,7 +95,3 @@ export function Room() {
     </div>
   );
 }
-function push(questions: any, question: { content: string; author: { name: string; avatar: string; }; isHighlighted: boolean; isAnswer: boolean; }) {
-  throw new Error('Function not implemented.');
-}
-

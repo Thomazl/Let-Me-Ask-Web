@@ -7,6 +7,7 @@ import { Button } from '../components/button';
 import '../styles/auth.scss';
 import { FormEvent, useState } from 'react';
 import { database, ref, get } from '../services/firebase';
+import swal from 'sweetalert';
 
 export function Home() {
   const history = useHistory();
@@ -26,13 +27,18 @@ export function Home() {
     event.preventDefault();
     //Verifica se não esta vazio
     if (roomCode.trim() === '') {
+      swal('Oops...', 'Por favor, digite o código da sala', 'error');
       return;
     }
     //Verifica se o codigo da sala existe
     const roomRef = ref(database, `rooms/${roomCode}`);
     const roomSnapshot = await get(roomRef);
     if (!roomSnapshot.exists()) {
-      alert('Room does not exist!');
+      swal({
+        title: 'Sala não encontrada',
+        text: 'Verifique o código da sala',
+        icon: 'error',
+      })
       return;
     }
 

@@ -6,6 +6,8 @@ import { Button } from '../components/button';
 import '../styles/auth.scss';
 import { database, ref } from '../services/firebase';
 import { useAuth } from '../hooks/useAuth';
+import { push } from 'firebase/database';
+import swal from 'sweetalert';
 export function NewRoom() {
     const { user } = useAuth()
     const history = useHistory();
@@ -14,21 +16,22 @@ export function NewRoom() {
     //Faz a criação da sala
     async function handleCreateRoom(event: FormEvent) {
         event.preventDefault();
-        //verifica se não está vazio
+        //verifica se está vazio
         if (newRoom.trim() === '') {
+            swal('Oops...', 'Por favor, digite um nome para a sala', 'error');
             return;
         }
 
 
         const roomRef = ref(database, 'rooms');
 
-        //Salva no banco de dados dados da sala
+        //Salva dados da sala no banco
         const firebaseRoom = push(roomRef, {
             tittle: newRoom,
             authorId: user?.id,
         })
 
-        history.push(`/rooms/${firebaseRoom}`);
+        history.push(`/rooms/${firebaseRoom.key}`);
     }
     return (
         <div id="page-auth">
@@ -57,8 +60,4 @@ export function NewRoom() {
             </main>
         </div>
     )
-}
-
-function push(roomRef: any, arg1: { tittle: string; authorId: string | undefined; }) {
-    throw new Error('Function not implemented.');
 }

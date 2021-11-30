@@ -1,3 +1,12 @@
+:root{
+    --data-color-purple: #835AFD;
+    --data-color-white: #FFF;
+    --data-color-white-gray: #F8F8F8;
+    --data-color-grey: #a8a8b3;
+    --data-color-grey-dark: #737380;
+    --data-color-rose: #e559f9;
+}
+
 #page-auth {
     display: flex;
     align-items: stretch;
@@ -6,8 +15,8 @@
 
     aside {
         flex: 7;
-        background: #835afd;
-        color: #fff;
+        background: var(--data-color-purple);
+        color: var(--data-color-white);
 
         display: flex;
         flex-direction: column;
@@ -29,7 +38,7 @@
             font-size: 24px;
             line-height: 32px;
             margin-top: 16px;
-            color: #f8f8f8;
+            color: var(--data-color-white-gray);
         }
     }
 
@@ -65,8 +74,8 @@
                 height: 50px;
                 border-radius: 8px;
                 padding: 0 16px;
-                background: #fff;
-                border: 1px solid #a8a8b3;
+                background: var(--data-color-white);
+                border: 1px solid var(--data-color-grey);
             }
 
             button {
@@ -81,12 +90,12 @@
 
         P {
             font-size: 14px;
-            color: #737380;
+            color: var(--data-color-grey-dark);
             margin-top: 16px;
 
 
             a {
-                color: #e559f9;
+                color: var(--data-color-rose);
             }
         }
     }
