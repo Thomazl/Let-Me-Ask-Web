@@ -1,63 +1,64 @@
-import { Link, useHistory } from 'react-router-dom';
-import { FormEvent, useState } from 'react';
-import ilustrationSVG from '../assets/images/illustration.svg';
-import logoSVG from '../assets/images/logo.svg';
-import { Button } from '../components/button';
-import '../styles/auth.scss';
-import { database, ref } from '../services/firebase';
+import { FormEvent, useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+
+import illustrationImg from '../assets/images/illustration.svg'
+import logoImg from '../assets/images/logo.svg';
+
+import { Button } from '../components/Button';
+import { database } from '../services/firebase';
 import { useAuth } from '../hooks/useAuth';
-import { push } from 'firebase/database';
-import swal from 'sweetalert';
+
+import '../styles/auth.scss';
+
 export function NewRoom() {
-    const { user } = useAuth()
-    const history = useHistory();
+  const { user } = useAuth()
+  const history = useHistory()
+  const [newRoom, setNewRoom] = useState('');
 
-    const [newRoom, setNewRoom] = useState('');
-    //Faz a criação da sala
-    async function handleCreateRoom(event: FormEvent) {
-        event.preventDefault();
-        //verifica se está vazio
-        if (newRoom.trim() === '') {
-            swal('Oops...', 'Por favor, digite um nome para a sala', 'error');
-            return;
-        }
+  async function handleCreateRoom(event: FormEvent) {
+    event.preventDefault();
 
-
-        const roomRef = ref(database, 'rooms');
-
-        //Salva dados da sala no banco
-        const firebaseRoom = push(roomRef, {
-            tittle: newRoom,
-            authorId: user?.id,
-        })
-
-        history.push(`/rooms/${firebaseRoom.key}`);
+    if (newRoom.trim() === '') {
+      return;
     }
-    return (
-        <div id="page-auth">
-            <aside>
-                <img src={ilustrationSVG} alt="Ilustração" />
-                <strong>Crie salas de Q&amp;A ao-vivo</strong>
-                <p>Tire as dúvidas da sua audiência em tempo real</p>
-            </aside>
-            <main>
-                <div className="main-content">
-                    <img src={logoSVG} alt="logoSVG" />
-                    <h2>Criar uma nova sala</h2>
-                    <form onSubmit={handleCreateRoom}>
-                        <input
-                            type="text"
-                            placeholder="Nome da sala"
-                            onChange={event => setNewRoom(event.target.value)}
-                            value={newRoom}
-                        />
-                        <Button type="submit">
-                            Criar sala
-                        </Button>
-                    </form>
-                    <p>Quer entrar em uma sala existente?<Link to="/">Clique aqui</Link></p>
-                </div>
-            </main>
+
+    const roomRef = database.ref('rooms');
+
+    const firebaseRoom = await roomRef.push({
+      title: newRoom,
+      authorId: user?.id,
+    })
+
+    history.push(`/rooms/${firebaseRoom.key}`)
+  }
+
+  return (
+    <div id="page-auth">
+      <aside>
+        <img src={illustrationImg} alt="Ilustração simbolizando perguntas e respostas" />
+        <strong>Crie salas de Q&amp;A ao-vivo</strong>
+        <p>Tire as dúvidas da sua audiência em tempo-real</p>
+      </aside>
+      <main>
+        <div className="main-content">
+          <img src={logoImg} alt="Letmeask" />
+          <h2>Criar uma nova sala</h2>
+          <form onSubmit={handleCreateRoom}>
+            <input 
+              type="text"
+              placeholder="Nome da sala"
+              onChange={event => setNewRoom(event.target.value)}
+              value={newRoom}
+            />
+            <Button type="submit">
+              Criar sala
+            </Button>
+          </form>
+          <p>
+            Quer entrar em uma sala existente? <Link to="/">clique aqui</Link>
+          </p>
         </div>
-    )
+      </main>
+    </div>
+  )
 }

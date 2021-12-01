@@ -1,13 +1,16 @@
-import { useHistory } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
-import ilustrationSVG from '../assets/images/illustration.svg';
-import logoSVG from '../assets/images/logo.svg';
-import googleSVG from '../assets/images/google-icon.svg';
-import { Button } from '../components/button';
-import '../styles/auth.scss';
+import { useHistory } from 'react-router-dom'
 import { FormEvent, useState } from 'react';
-import { database, ref, get } from '../services/firebase';
-import swal from 'sweetalert';
+
+import illustrationImg from '../assets/images/illustration.svg'
+import logoImg from '../assets/images/logo.svg';
+import googleIconImg from '../assets/images/google-icon.svg';
+
+import { database } from '../services/firebase';
+
+import { Button } from '../components/Button';
+import { useAuth } from '../hooks/useAuth';
+
+import '../styles/auth.scss';
 
 export function Home() {
   const history = useHistory();
@@ -22,51 +25,48 @@ export function Home() {
     history.push('/rooms/new');
   }
 
-  //Cria a função para se juntar a sala
   async function handleJoinRoom(event: FormEvent) {
     event.preventDefault();
-    //Verifica se não esta vazio
+
     if (roomCode.trim() === '') {
-      swal('Oops...', 'Por favor, digite o código da sala', 'error');
-      return;
-    }
-    //Verifica se o codigo da sala existe
-    const roomRef = ref(database, `rooms/${roomCode}`);
-    const roomSnapshot = await get(roomRef);
-    if (!roomSnapshot.exists()) {
-      swal({
-        title: 'Sala não encontrada',
-        text: 'Verifique o código da sala',
-        icon: 'error',
-      })
       return;
     }
 
+    const roomRef = await database.ref(`rooms/${roomCode}`).get();
+
+    if (!roomRef.exists()) {
+      alert('Room does not exists.');
+      return;
+    }
+
+    if (roomRef.val().endedAt) {
+      alert('Room already closed.');
+      return;
+    }
 
     history.push(`/rooms/${roomCode}`);
   }
+
   return (
     <div id="page-auth">
       <aside>
-        <img src={ilustrationSVG} alt="Ilustração" />
+        <img src={illustrationImg} alt="Ilustração simbolizando perguntas e respostas" />
         <strong>Crie salas de Q&amp;A ao-vivo</strong>
-        <p>Tire as dúvidas da sua audiência em tempo real</p>
+        <p>Tire as dúvidas da sua audiência em tempo-real</p>
       </aside>
       <main>
         <div className="main-content">
-          <img src={logoSVG} alt="logoSVG" />
+          <img src={logoImg} alt="Letmeask" />
           <button onClick={handleCreateRoom} className="create-room">
-            <img src={googleSVG} alt="googleSVG" />
-            Crie sua conta com o Google
+            <img src={googleIconImg} alt="Logo do Google" />
+            Crie sua sala com o Google
           </button>
-          <div className="separator">
-            Ou entre em uma sala
-          </div>
+          <div className="separator">ou entre em uma sala</div>
           <form onSubmit={handleJoinRoom}>
-            <input
+            <input 
               type="text"
-              placeholder="Digite o codigo da sala"
-              onChange={(event) => setRoomCode(event.target.value)}
+              placeholder="Digite o código da sala"
+              onChange={event => setRoomCode(event.target.value)}
               value={roomCode}
             />
             <Button type="submit">
@@ -78,4 +78,3 @@ export function Home() {
     </div>
   )
 }
-
