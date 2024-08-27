@@ -3,9 +3,9 @@ import { useParams } from 'react-router-dom'
 
 import logoImg from '../assets/images/logo.svg';
 
-import { Button } from '../components/Button';
+import { Button } from '../components/button';
 import { Question } from '../components/Question';
-import { RoomCode } from '../components/RoomCode';
+import { RoomCode } from '../components/roomcode';
 import { useAuth } from '../hooks/useAuth';
 import { useRoom } from '../hooks/useRoom';
 import { database } from '../services/firebase';
